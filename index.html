@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rythu Mitra: Farmer Information Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF5EA;--surf:#fff;--ink:#16261A;--mut:#44574A;--acc:#2F6B3A;--on:#fff;--sun:#F2B705;--line:#B9CDB9;--bad:#A4262C;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101A13;--surf:#1A2A1F;--ink:#EAF4EA;--mut:#B2C7B4;--acc:#7CCB8A;--on:#0E1A11;--line:#355039;--bad:#FF9AA0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101A13;--surf:#1A2A1F;--ink:#EAF4EA;--mut:#B2C7B4;--acc:#7CCB8A;--on:#0E1A11;--line:#355039;--bad:#FF9AA0;color-scheme:dark}
+:root[data-hc]{--ink:#000;--bg:#fff;--surf:#fff;--mut:#000;--line:#000;--acc:#0A3D14;--on:#fff}
+:root[data-hc][data-theme="dark"]{--ink:#fff;--bg:#000;--surf:#000;--mut:#fff;--line:#fff;--acc:#FFE14D;--on:#000}
+html{scroll-padding-top:env(safe-area-inset-top,0px);font-size:calc(112.5% * var(--s,1))}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.6 "Noto Sans","Noto Sans Telugu","Noto Sans Devanagari",system-ui,sans-serif;padding-bottom:calc(5.5rem + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--acc);z-index:30}
+h1,h2{margin:0 0 .4em;line-height:1.3}h1{font-size:1.5rem}h2{font-size:1.35rem}
+p{margin:0 0 .8em}
+:focus-visible{outline:4px solid var(--sun);outline-offset:2px}
+button,a.btn{font:inherit;min-height:48px;min-width:48px;border:3px solid var(--ink);background:var(--surf);color:var(--ink);border-radius:12px;padding:.4rem .9rem;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;font-weight:700}
+button:active{transform:scale(.97)}
+.primary{background:var(--acc);color:var(--on);border-color:var(--acc)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--acc);color:var(--on)}
+.hd{max-width:44rem;margin:0 auto;padding:.5rem .9rem;display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:space-between}
+.hd strong{font-size:1.2rem}
+.hd button{background:transparent;color:var(--on);border-color:var(--on);min-height:44px;padding:.2rem .7rem}
+.hd button[aria-pressed="true"]{background:var(--on);color:var(--acc)}
+.tools{display:flex;gap:.35rem;flex-wrap:wrap}
+main{max-width:44rem;margin:0 auto;padding:1rem .9rem}
+.view{display:none}.view.on{display:block}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;margin:.7rem 0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.tile{flex-direction:column;min-height:8.5rem;font-size:1.15rem;border-width:3px;border-radius:16px}
+.tile .ic{font-size:3rem;line-height:1}
+.card{background:var(--surf);border:2px solid var(--line);border-radius:14px;padding:.8rem 1rem;margin-bottom:.7rem}
+.price{display:flex;align-items:center;gap:.8rem;min-height:4rem}
+.price .ic{font-size:2rem}.price .n{flex:1;font-weight:700}.price .v{font-size:1.2rem;font-weight:700;text-align:right}
+.price small{display:block;color:var(--mut);font-weight:400}
+input[type=search]{width:100%;font:inherit;min-height:52px;padding:.5rem .8rem;border:3px solid var(--ink);border-radius:12px;background:var(--surf);color:var(--ink)}
+.days{display:grid;grid-template-columns:repeat(auto-fit,minmax(6rem,1fr));gap:.6rem}
+.day{text-align:center}.day .ic{font-size:2.4rem}
+.note{border-left:6px solid var(--sun);background:var(--surf);padding:.6rem .9rem;border-radius:6px;margin:.8rem 0}
+.prog{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin:.4rem 0 1rem}.prog i{display:block;height:100%;background:var(--acc);transition:width .25s}
+.opts{display:grid;gap:.7rem}.opts button{min-height:64px;font-size:1.15rem;justify-content:flex-start}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surf);border-top:3px solid var(--acc);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav div{max-width:44rem;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+nav button{flex-direction:column;gap:0;border:0;border-radius:0;min-height:62px;font-size:.78rem;padding:.2rem;background:transparent}
+nav button .ic{font-size:1.5rem;line-height:1.2}
+nav button[aria-current="page"]{background:var(--acc);color:var(--on)}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6.5rem + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:10px;z-index:40;display:none;max-width:90vw}
+details{background:var(--surf);border:2px solid var(--line);border-radius:12px;padding:.5rem .9rem;margin-top:1.2rem;font-size:.9rem}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}
+.big{font-size:1.6rem;font-weight:700}
+/* Responsive: small phones */
+@media (max-width:360px){
+.tiles{grid-template-columns:1fr}
+.hd strong{font-size:1.05rem}
+nav button{font-size:.68rem}
+.price .v{font-size:1.05rem}
+}
+/* Responsive: tablets */
+@media (min-width:640px){
+.hd,main,nav div{max-width:56rem}
+.tiles{grid-template-columns:repeat(4,1fr)}
+.days{grid-template-columns:repeat(5,1fr)}
+#pl{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+#pl .card{margin-bottom:0}
+.opts{grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}
+main{padding:1.25rem 1.25rem}
+}
+/* Responsive: laptops and desktops */
+@media (min-width:960px){
+.hd,main,nav div{max-width:70rem}
+main{padding:1.75rem 2rem}
+h1{font-size:2rem}h2{font-size:1.6rem}
+.tile{min-height:11rem}
+nav button{flex-direction:row;gap:.6rem;font-size:1rem;min-height:60px}
+nav button .ic{font-size:1.4rem}
+#toast{bottom:5.5rem}
+}
+/* Responsive: phones in landscape */
+@media (max-height:480px) and (orientation:landscape){
+nav button{min-height:46px;flex-direction:row;gap:.4rem}
+.tile{min-height:6rem}
+.tile .ic{font-size:2rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+ <div class="hd">
+  <strong id="ttl">Rythu Mitra</strong>
+  <div class="tools">
+   <button data-lang="en" aria-label="English">EN</button>
+   <button data-lang="te" aria-label="Telugu">తె</button>
+   <button data-lang="hi" aria-label="Hindi">हि</button>
+   <button id="sm" aria-label="Smaller text">A−</button>
+   <button id="lg" aria-label="Larger text">A+</button>
+   <button id="hc" aria-pressed="false" aria-label="High contrast">◐</button>
+  </div>
+ </div>
+</header>
+<main id="main" tabindex="-1"></main>
+<div id="toast" role="status" aria-live="polite"></div>
+<nav aria-label="Main"><div id="nav"></div></nav>
+
+<script>
+(function(){
+var T={
+en:{ttl:"Rythu Mitra",tag:"Simple farm information, in your language",ask:"What do you need?",home:"Home",prices:"Crop prices",weather:"Weather",advice:"Crop advice",schemes:"Schemes",help:"Help",listen:"Listen",back:"Back",search:"Search crop name",per:"per quintal",sample:"These are sample prices. Confirm at your market.",up:"Rising",down:"Falling",rain:"Rain",wadv:"Rain is likely on day 3. Do not spray pesticide that day.",qs:"Which season?",qw:"How much water do you have?",low:"Low water",high:"Plenty of water",res:"These crops suit you",again:"Start again",disc:"General guide only. Ask your agriculture officer.",step:"Step",kharif:"Kharif (rainy)",rabi:"Rabi (winter)",summer:"Summer",none:"No crop found.",
+rice:"Rice",cotton:"Cotton",maize:"Maize",chilli:"Chilli",turmeric:"Turmeric",groundnut:"Groundnut",tomato:"Tomato",
+s1:"PM-KISAN",d1:"₹6,000 a year in three installments to your bank account.",s2:"Crop insurance",d2:"Compensation if rain or pests damage your crop.",s3:"Kisan Credit Card",d3:"Crop loans at low interest.",apply:"To apply, ask your bank or agriculture office.",
+kcc:"Kisan Call Centre (free)",call:"Call now",nov:"Voice is not available on this device.",read:"Reading aloud…",lc:"English"},
+te:{ttl:"రైతు మిత్ర",tag:"మీ భాషలో సులభమైన వ్యవసాయ సమాచారం",ask:"మీకు ఏమి కావాలి?",home:"హోమ్",prices:"పంట ధరలు",weather:"వాతావరణం",advice:"పంట సలహా",schemes:"పథకాలు",help:"సహాయం",listen:"వినండి",back:"వెనుకకు",search:"పంట పేరు వెతకండి",per:"క్వింటాల్‌కు",sample:"ఇవి నమూనా ధరలు. మార్కెట్‌లో నిర్ధారించుకోండి.",up:"పెరుగుతోంది",down:"తగ్గుతోంది",rain:"వర్షం",wadv:"మూడో రోజు వర్షం వచ్చే అవకాశం ఉంది. ఆ రోజు మందు పిచికారీ చేయవద్దు.",qs:"ఏ సీజన్?",qw:"నీటి లభ్యత ఎంత?",low:"తక్కువ నీరు",high:"ఎక్కువ నీరు",res:"ఈ పంటలు మీకు సరిపోతాయి",again:"మళ్లీ మొదలుపెట్టు",disc:"ఇది సాధారణ సలహా. మీ వ్యవసాయ అధికారిని అడగండి.",step:"దశ",kharif:"ఖరీఫ్ (వర్షాకాలం)",rabi:"రబీ (శీతాకాలం)",summer:"వేసవి",none:"పంట దొరకలేదు.",
+rice:"వరి",cotton:"పత్తి",maize:"మొక్కజొన్న",chilli:"మిరప",turmeric:"పసుపు",groundnut:"వేరుశనగ",tomato:"టమాటా",
+s1:"పీఎం-కిసాన్",d1:"ఏటా ₹6,000, మూడు విడతల్లో మీ బ్యాంకు ఖాతాలో.",s2:"పంట బీమా",d2:"వర్షాలు, తెగుళ్లతో పంట నష్టపోతే పరిహారం.",s3:"కిసాన్ క్రెడిట్ కార్డ్",d3:"తక్కువ వడ్డీతో పంట రుణం.",apply:"దరఖాస్తుకు మీ బ్యాంకు లేదా వ్యవసాయ కార్యాలయాన్ని అడగండి.",
+kcc:"కిసాన్ కాల్ సెంటర్ (ఉచితం)",call:"ఇప్పుడు కాల్ చేయండి",nov:"ఈ ఫోన్‌లో వాయిస్ లేదు.",read:"చదువుతోంది…",lc:"తెలుగు"},
+hi:{ttl:"किसान मित्र",tag:"आपकी भाषा में सरल खेती की जानकारी",ask:"आपको क्या चाहिए?",home:"होम",prices:"फसल भाव",weather:"मौसम",advice:"फसल सलाह",schemes:"योजनाएँ",help:"मदद",listen:"सुनें",back:"वापस",search:"फसल का नाम खोजें",per:"प्रति क्विंटल",sample:"ये नमूना भाव हैं। मंडी में पुष्टि करें।",up:"बढ़ रहा है",down:"घट रहा है",rain:"बारिश",wadv:"तीसरे दिन बारिश की संभावना है। उस दिन दवा का छिड़काव न करें।",qs:"कौन सा मौसम?",qw:"कितना पानी है?",low:"कम पानी",high:"ज्यादा पानी",res:"ये फसलें आपके लिए ठीक हैं",again:"फिर से शुरू करें",disc:"यह सामान्य सलाह है। कृषि अधिकारी से पूछें।",step:"चरण",kharif:"खरीफ (बरसात)",rabi:"रबी (सर्दी)",summer:"गर्मी",none:"कोई फसल नहीं मिली।",
+rice:"चावल",cotton:"कपास",maize:"मक्का",chilli:"मिर्च",turmeric:"हल्दी",groundnut:"मूंगफली",tomato:"टमाटर",
+s1:"पीएम-किसान",d1:"हर साल ₹6,000, तीन किस्तों में बैंक खाते में।",s2:"फसल बीमा",d2:"बारिश या कीट से नुकसान पर मुआवजा।",s3:"किसान क्रेडिट कार्ड",d3:"कम ब्याज पर फसल ऋण।",apply:"आवेदन के लिए बैंक या कृषि कार्यालय से पूछें।",
+kcc:"किसान कॉल सेंटर (निःशुल्क)",call:"अभी कॉल करें",nov:"इस डिवाइस पर आवाज़ उपलब्ध नहीं।",read:"पढ़ रहा है…",lc:"हिन्दी"}};
+var VC={en:"en-IN",te:"te-IN",hi:"hi-IN"};
+var C=[["rice","🌾",2300,1],["cotton","☁️",7000,0],["maize","🌽",2200,1],["chilli","🌶️",14000,0],["turmeric","🟡",13000,1],["groundnut","🥜",6500,1],["tomato","🍅",1800,0]];
+var R={kharif:{low:["cotton","maize","groundnut"],high:["rice","turmeric"]},rabi:{low:["chilli","groundnut"],high:["rice","maize"]},summer:{low:["tomato","groundnut"],high:["tomato","maize"]}};
+var W=[["☀️",34,5],["⛅",33,10],["🌧️",29,80],["🌦️",30,50],["☀️",33,5]];
+var lang="en",view="home",q="",ad={s:null,w:null},root=document.documentElement,sc=1;
+var main=document.getElementById("main"),nav=document.getElementById("nav"),toast=document.getElementById("toast");
+function t(k){return T[lang][k]||T.en[k]||k}
+function save(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function say(m){toast.textContent=m;toast.style.display="block";clearTimeout(say.x);say.x=setTimeout(function(){toast.style.display="none"},2500)}
+function listenBtn(){return "<button class='primary' id='lis' aria-label='"+t("listen")+"'>🔊 "+t("listen")+"</button>"}
+function top(title){return "<div class='row' style='justify-content:space-between;align-items:center'><h2 id='vh'>"+title+"</h2>"+listenBtn()+"</div>"}
+
+var V={
+home:function(){var tl=[["prices","💰"],["weather","⛅"],["advice","🌱"],["schemes","📄"]];
+return "<h1 id='vh'>"+t("ttl")+"</h1><p>"+t("tag")+"</p><div class='row'>"+listenBtn()+"</div><h2>"+t("ask")+"</h2><div class='tiles'>"+
+tl.map(function(x){return "<button class='tile' data-go='"+x[0]+"'><span class='ic' aria-hidden='true'>"+x[1]+"</span>"+t(x[0])+"</button>"}).join("")+
+"</div><div class='row'><a class='btn primary' style='width:100%;min-height:60px' href='tel:18001801551'>📞 "+t("help")+": 1800-180-1551</a></div>"+
+"<details><summary>HCI concepts used in this site (for the report)</summary><ul><li>Icons + text labels: recognition over recall</li><li>Big touch targets (48 px+): Fitts’s law</li><li>3 languages + voice: match with real world, accessibility</li><li>One question per screen: Hick’s law, minimalist design</li><li>Progress bar and toasts: visibility of system status</li><li>Back and Start again: user control and freedom</li><li>Text size, contrast, dark mode: flexibility, accessibility</li><li>Bottom navigation always visible: consistency</li><li>Trend shown with arrow and word, not color alone</li></ul></details>"},
+prices:function(){var f=C.filter(function(c){return t(c[0]).toLowerCase().indexOf(q.toLowerCase())>-1});
+return top(t("prices"))+"<input type='search' id='sq' placeholder='"+t("search")+"' aria-label='"+t("search")+"' value='"+q.replace(/'/g,"")+"'><p class='note'>"+t("sample")+"</p><div id='pl'>"+list(f)+"</div>"},
+weather:function(){var d=new Date();
+return top(t("weather"))+"<div class='days'>"+W.map(function(w,i){var x=new Date(d.getTime()+i*864e5);
+var n=new Intl.DateTimeFormat(VC[lang],{weekday:"short"}).format(x);
+return "<div class='card day'><b>"+n+"</b><div class='ic' aria-hidden='true'>"+w[0]+"</div><div class='big'>"+w[1]+"°C</div><div>"+t("rain")+" "+w[2]+"%</div></div>"}).join("")+"</div><p class='note'>"+t("wadv")+"</p>"},
+advice:function(){var h=top(t("advice"));
+if(!ad.s){return h+"<div class='prog'><i style='width:33%'></i></div><p><b>"+t("step")+" 1/2:</b> "+t("qs")+"</p><div class='opts'>"+["kharif","rabi","summer"].map(function(k){return "<button data-s='"+k+"'>"+t(k)+"</button>"}).join("")+"</div>"}
+if(!ad.w){return h+"<div class='prog'><i style='width:66%'></i></div><p><b>"+t("step")+" 2/2:</b> "+t("qw")+"</p><div class='opts'><button data-w='low'>💧 "+t("low")+"</button><button data-w='high'>🌊 "+t("high")+"</button></div><div class='row'><button data-back='1'>← "+t("back")+"</button></div>"}
+var L=R[ad.s][ad.w];
+return h+"<div class='prog'><i style='width:100%'></i></div><p><b>"+t("res")+"</b></p>"+L.map(function(id){var c=C.filter(function(x){return x[0]===id})[0];return "<div class='card price'><span class='ic' aria-hidden='true'>"+c[1]+"</span><span class='n'>"+t(id)+"</span></div>"}).join("")+"<p class='note'>"+t("disc")+"</p><div class='row'><button data-back='1'>← "+t("back")+"</button><button class='primary' data-reset='1'>"+t("again")+"</button></div>"},
+schemes:function(){return top(t("schemes"))+[1,2,3].map(function(i){return "<div class='card'><b>"+t("s"+i)+"</b><p>"+t("d"+i)+"</p></div>"}).join("")+"<p class='note'>"+t("apply")+"</p><div class='card'><b>"+t("kcc")+"</b><div class='row'><a class='btn primary' href='tel:18001801551'>📞 "+t("call")+": 1800-180-1551</a></div></div>"}
+};
+function list(f){return f.map(function(c){var u=c[3]?"▲ "+t("up"):"▼ "+t("down");
+return "<div class='card price'><span class='ic' aria-hidden='true'>"+c[1]+"</span><span class='n'>"+t(c[0])+"<small>"+u+"</small></span><span class='v'>₹"+c[2].toLocaleString("en-IN")+"<small>"+t("per")+"</small></span></div>"}).join("")||"<p>"+t("none")+"</p>"}
+
+function render(focus){document.documentElement.lang=lang;
+document.getElementById("ttl").textContent=t("ttl");document.title=t("ttl");
+main.innerHTML=V[view]();
+nav.innerHTML=[["home","🏠"],["prices","💰"],["weather","⛅"],["advice","🌱"],["schemes","📄"]].map(function(x){return "<button data-go='"+x[0]+"'"+(x[0]===view?" aria-current='page'":"")+"><span class='ic' aria-hidden='true'>"+x[1]+"</span>"+t(x[0])+"</button>"}).join("");
+document.querySelectorAll("[data-lang]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.lang===lang)});
+if(focus){var h=document.getElementById("vh");if(h){h.setAttribute("tabindex","-1");h.focus()}window.scrollTo(0,0)}}
+function go(v,silent){view=v;if(location.hash!=="#"+v)location.hash=v;render(!silent)}
+document.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var d=b.dataset;
+if(d.go)go(d.go);
+else if(d.lang){lang=d.lang;save("fp-lang",lang);render();say(t("lc"))}
+else if(d.s){ad.s=d.s;render(true)}
+else if(d.w){ad.w=d.w;render(true)}
+else if(d.back){if(ad.w)ad.w=null;else ad.s=null;render(true)}
+else if(d.reset){ad={s:null,w:null};render(true)}
+else if(b.id==="lis"){var s=window.speechSynthesis;if(!s||!window.SpeechSynthesisUtterance){say(t("nov"));return}
+s.cancel();var u=new SpeechSynthesisUtterance(main.innerText.replace(/[▲▼🔊]/g,""));u.lang=VC[lang];s.speak(u);say(t("read"))}
+else if(b.id==="sm"){sc=Math.max(.85,sc-.1);root.style.setProperty("--s",sc)}
+else if(b.id==="lg"){sc=Math.min(1.5,sc+.1);root.style.setProperty("--s",sc)}
+else if(b.id==="hc"){var on=!root.hasAttribute("data-hc");on?root.setAttribute("data-hc",""):root.removeAttribute("data-hc");b.setAttribute("aria-pressed",on)}});
+document.addEventListener("input",function(e){if(e.target.id==="sq"){q=e.target.value;document.getElementById("pl").innerHTML=list(C.filter(function(c){return t(c[0]).toLowerCase().indexOf(q.toLowerCase())>-1}))}});
+window.addEventListener("hashchange",function(){var h=location.hash.slice(1);if(V[h]&&h!==view){view=h;render(true)}});
+var sv=load("fp-lang");if(sv&&T[sv])lang=sv;
+var h0=location.hash.slice(1);if(V[h0])view=h0;
+render(false);
+})();
+</script>
+</body>
+</html>
